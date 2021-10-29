@@ -1,0 +1,34 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}QC{% endblock %}</title>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
+    {% block head_css %}{% endblock %}
+</head>
+<body>
+    {% if user.is_superuser %}
+        <div id="navbar">
+            <img src="{% static 'images/logo.png' %}" id="nav-logo">
+            <div id="nav-text">JEWELRY</div>
+            <a href="{% url 'home' %}" class="nav-button">หน้าหลัก</a>
+            <a href="{% url 'qc:create_user_view' %}" class="nav-button">สร้างข้อมูลพนักงาน</a>
+            <a href="#" class="nav-button">จัดการงาน</a>
+            <form method="POST" action="{% url 'logout' %}" id="logout-form">
+                {% csrf_token %}
+                <input id="logout-button" type="submit" value="ออกจากระบบ">
+            </form>
+        </div>
+    {% elif user.is_staff and user.is_superuser == false %}
+        staff navbar 
+    {% else %}
+    {% endif %}
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>

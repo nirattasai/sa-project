@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
+
+input[type=submit] {
+    border-color: transparent;
+}
+
+.container {
+    width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbar {
+    width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 72px;
+}
+
+#nav-logo {
+    display: inline-block;
+    width: 52.94px;
+    height: 50px;
+    margin-left: 32px;
+    margin-top: 11px;
+}
+
+#nav-text {
+    display: inline-block;
+    position: relative;
+    top: -14px;
+    left: 12px;
+    font-family: Playfair Display;
+    margin-top: -20px;
+    margin-right: 80px;
+    font-size: 30px;
+    line-height: 44px;
+    letter-spacing: -0.64px;
+    color: #032D23;
+}
+
+.nav-button {
+    display: inline-block;
+    position: relative;
+    margin-right: 32px;
+    top: -18px;
+    letter-spacing: 0.62px;
+    font-family: Prompt;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #18191F;
+    text-decoration: none;
+}
+
+#logout-form {
+    width: max-content;
+    display: inline-block;
+    position: relative;
+    float: right;
+    top: 20px;
+}
+#logout-button {
+    background: #51544C;
+
+    border-radius: 6px;
+    position: relative;
+    letter-spacing: 0.62px;
+    font-family: Prompt;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: white;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+
+    width: 111px;
+    height: 40px;
+}
+
+#logout-button:hover{
+    background: #a4a5a4;
+    color: black;
+}

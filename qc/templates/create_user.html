@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create User{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/create_user.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <img src="{% static 'images/bg1.jpg' %}" id="bg">
+    <div id="text-header">กรอกข้อมูลพนักงาน</div>
+    <form method="POST" action="{% url 'qc:create_user' %}" id="create-form">
+        {% csrf_token %}
+        <select name="role" id="role-input" class="input">
+            <option value="header">หัวหน้าแผนก QC</option>
+            <option value="staff">พนักงานตรวจสอบ</option>
+            <option value="craftman">ช่างผลิต</option>
+        </select>
+        <input type="email" placeholder="อีเมล" class="input" id="email" required>
+        <input type="text" placeholder="ชื่อ" class="input" id="name" required>
+        <input type="text" placeholder="นามสกุล" class="input" id="lastname" required>
+        <input type="password" placeholder="รหัสผ่าน" class="input" id="password" required>
+        <input type="password" placeholder="ยืนยันรหัสผ่าน" class="input" id="confirm_password" required>
+        <input type="submit" value="สร้างข้อมูลพนักงาน" id="confirm">
+    </form>
+</div>
+{% endblock %}

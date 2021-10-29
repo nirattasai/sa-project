@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <img src="{% static 'images/logo.png' %}" id="logo">
+    <div id="logo-text">JEWELRY</div>
+    <img src="{% static 'images/bg1.jpg' %}" id="bg">
+    <div id="login-text-header">เข้าสู่ระบบ</div>
+    <form method="POST" action="{% url 'login' %}" id="login-form">
+        {% csrf_token %}
+        <input type="email" name="email" id="email-input" placeholder="อีเมล" required="">
+        <input type="password" name="password" id="password-input" placeholder="รหัสผ่าน" required="">
+        <input id="login-button" type="submit" value="เข้าสู่ระบบ">
+    </form>
+</div>
+{% endblock %}
