@@ -9,4 +9,5 @@ urlpatterns = [
     url(r"^staff/$", views.staff_home, name="staff_home"),
     url(r"^admin/create_user$", views.create_user_view, name="create_user_view"),
     url(r"^create_user$", views.create_user, name="create_user"),
+    url(r"^admin/manage_order$", views.manage_order, name="manage_order"),
 ]

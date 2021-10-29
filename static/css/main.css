@@ -5,6 +5,10 @@ input[type=submit] {
     border-color: transparent;
 }
 
+button {
+    border-color: transparent;
+}
+
 .container {
     width: 1440px;
     margin-left: auto;

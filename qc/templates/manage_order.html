@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Manage Orders{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/manage_order.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'css/admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div id="header">
+        <div id="header-text">จัดการงาน</div>
+    </div>
+    <button id="create-order">สร้าง order</button>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(initPage);
+
+    function initPage(){
+        $('#create-order').click(function(){
+            alert("ccc")
+        }
+    )
+    }
+    
+</script>
+{% endblock %}
