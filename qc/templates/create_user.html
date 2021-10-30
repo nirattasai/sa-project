@@ -11,16 +11,41 @@
     <form method="POST" action="{% url 'qc:create_user' %}" id="create-form">
         {% csrf_token %}
         <select name="role" id="role-input" class="input">
-            <option value="header">หัวหน้าแผนก QC</option>
-            <option value="staff">พนักงานตรวจสอบ</option>
-            <option value="craftman">ช่างผลิต</option>
+            {% if user.is_superuser %}
+            <option value="header" id="header">หัวหน้างาน</option>
+            {% endif %}
+            <option value="staff" id="staff">พนักงานตรวจสอบ</option>
+            <option value="craftman" id="craftman">ช่างผลิต</option>
         </select>
-        <input type="email" name="email" placeholder="อีเมล" class="input" required>
-        <input type="text" name="name" placeholder="ชื่อ" class="input" required>
-        <input type="text" name="lastname" placeholder="นามสกุล" class="input" required>
-        <input type="password" name="password" placeholder="รหัสผ่าน" class="input" required>
-        <input type="password" name="confirm_password" placeholder="ยืนยันรหัสผ่าน" class="input" required>
+        <input type="email" name="email" placeholder="อีเมล" class="input" id="email">
+        <input type="text" name="name" placeholder="ชื่อ" class="input" id="name">
+        <input type="text" name="lastname" placeholder="นามสกุล" class="input" id="lastname">
+        <input type="password" name="password" placeholder="รหัสผ่าน" class="input" id="password">
+        <input type="password" name="confirm_password" placeholder="ยืนยันรหัสผ่าน" class="input" id="confirm_password">
         <input type="submit" value="สร้างข้อมูลพนักงาน" id="confirm">
     </form>
 </div>
+
+
+<script>
+    document.getElementById("name").value = null
+    document.getElementById("lastname").value = null
+    document.getElementById("email").value = null
+    document.getElementById("password").value = null
+    document.getElementById("confirm_password").value = null
+
+
+    document.getElementById("role-input").addEventListener('change', function(){
+        if (this.value == "craftman"){
+            document.getElementById("email").style.display = "none"
+            document.getElementById("password").style.display = "none"
+            document.getElementById("confirm_password").style.display = "none"
+        }
+        else if (this.value == "staff"){
+            document.getElementById("email").style.display = "block"
+            document.getElementById("password").style.display = "block"
+            document.getElementById("confirm_password").style.display = "block"
+        }
+    })
+</script>
 {% endblock %}

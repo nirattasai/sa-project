@@ -8,11 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}QC{% endblock %}</title>
     <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {% block head_css %}{% endblock %}
 </head>
 <body>
-    {% if user.profile.role == "header" %}
+    {% if user.profile.role == "header" or user.is_superuser %}
         <div id="navbar">
             <img src="{% static 'images/logo.png' %}" id="nav-logo">
             <div id="nav-text">JEWELRY</div>
@@ -28,8 +27,10 @@
         staff navbar 
     {% else %}
     {% endif %}
-    {% block content %}
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
     
-    {% endblock %}
 </body>
 </html>

@@ -6,35 +6,46 @@
 <link href="{% static 'css/admin.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block content %}
-<div class="container">
-    <div id="header">
-        <div id="header-text">จัดการงาน</div>
-    </div>
-    <button id="create-order">สร้าง order</button>
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div id="header">
+    <div id="header-text">จัดการงาน</div>
 </div>
+<!-- <button id="create-order">สร้าง order</button> -->
+<a href="{% url 'qc:tmp_create_order' %}" id="create-order"></a>
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <td>หมายเลขติดตาม</td>
+                <td>วันที่ได้รับ</td>
+                <td>ประเภทงาน</td>
+                <td>ช่างที่ส่งมา</td>
+                <td>พนักงานที่รับผิดชอบ</td>
+                <td>สถานะ</td>
+                <td>หมายเหตุ</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{order.id}}</td>
+                <td>{{order.created}}</td>
+                <td>{{order.case}}</td>
+                <td>{{order.craftman.first_name}}</td>
+                <td>{{order.staff.profile.first_name}}</td>
+                <td>{{order.status}}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 <script>
     $(document).ready(initPage);
 
     function initPage(){
-        $('#create-order').click(function(){
-            alert("ccc")
-        }
-    )
+        
     }
     
 </script>
