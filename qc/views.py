@@ -127,5 +127,5 @@ def create_order(request):
     work_order.order_checklist = order_checklist
     work_order.save()
 
-    return HttpResponse(request)
-    # return redirect('qc:manage_order')
+    # return HttpResponse(request)
+    return redirect('qc:manage_order')
