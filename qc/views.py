@@ -117,6 +117,7 @@ def create_order(request):
         overall = overall,
         product_size = product_size,
         shape = shape,
+        case = case,
     )
 
     order_checklist = OrderChecklist.objects.create(
@@ -126,4 +127,5 @@ def create_order(request):
     work_order.order_checklist = order_checklist
     work_order.save()
 
-    return redirect('qc:manage_order')
+    return HttpResponse(request)
+    # return redirect('qc:manage_order')
