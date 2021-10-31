@@ -43,7 +43,7 @@
     color: #032D23;
 }
 
-#confirm {
+.confirm {
     position: relative;
     width: 385px;
     height: 64px;
@@ -61,6 +61,61 @@
     color: #FFFFFF;
 }
 
-#confirm:hover {
+.confirm:hover {
     background: #157a63;
+}
+
+.text {
+    font-family: Prompt;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+.form-control {
+    font-family: Prompt;
+    font-size: 20px;
+    display: -webkit-inline-box;
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+:root {
+    --form-control-color: rebeccapurple;
+  }
+
+input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+
+    margin-right: 10px;
+
+    transform: translateY(0.075em);
+
+    display: grid;
+    place-content: center;
+}
+
+input[type="radio"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+}
+
+input[type="radio"]:checked::before {
+    transform: scale(1);
 }

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Give work{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/create_user.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<style>
+    .input{
+        margin-top: 0px;
+    }
+
+    #bg{
+        height: 1200px;
+    }
+
+</style>
+    <img src="{% static 'images/bg1.jpg' %}" id="bg">
+    <div id="text-header">รายละเอียดงาน</div>
+    <div class="text">สถานะ</div>
+    {% if order.status == "waiting" %}
+    <input type="text" name="status" class="input" value="แจกงานเเล้ว" disabled>
+    {% elif order.status == "rejected" %}
+    <input type="text" name="status" class="input" value="งานไม่ผ่าน" disabled>
+    {% elif order.status == "completed" %}
+    <input type="text" name="status" class="input" value="แจ้งฝ่ายขายเเล้ว" disabled>
+    {% endif %}
+    <div class="text">พนักงานตรวจสอบ</div>
+    <input type="text" name="staff" class="input" placeholder="พนักงานตรวจสอบ" value="{{order.staff.profile.first_name}} {{order.staff.profile.last_name}}" disabled>
+    <div class="text">ช่างที่ส่งมา</div>
+    <input type="text" name="craftman" class="input" placeholder="ช่างที่ส่งมา" value="{{order.craftman.first_name}} {{order.craftman.last_name}}" disabled>
+    <div class="text">ประเภทงาน</div>
+    {% if order.case == "first_time" %}
+    <input type="text" name="case" class="input" placeholder="ประเภทงาน" value="ครั้งแรก" disabled>
+    {% else %}
+    <input type="text" name="case" class="input" placeholder="ประเภทงาน" value="แก้ไขงาน" disabled>
+    {% endif %}
+    <div class="text">จำนวนชิ้นงาน</div>
+    <input type="text" name="number" class="input" placeholder="จำนวนชิ้นงาน" value="{{order.number}}" disabled>
+    <div class="text">รูปทรงของงาน</div>
+    <input type="text" name="shape" class="input" placeholder="รูปทรงของงาน" value="{{order.shape}}" disabled>
+    <div class="text">ขนาดของเพชร</div>
+    <input type="text" name="jewelry_size" class="input" placeholder="ขนาดของเพชร" value="{{order.jewelry_size}}" disabled>
+    <div class="text">ขนาดชิ้นงาน</div>
+    <input type="text" name="product_size" class="input" placeholder="ขนาดชิ้นงาน" value="{{order.product_size}}" disabled>
+    <div class="text">ภาพรวม</div>
+    <input type="text" name="overall" class="input" placeholder="ภาพรวม" value="{{order.overall}}" disabled>
+    <div class="text">คอมเมนต์เพิ่มเติม</div>
+    <input type="text" name="comment" class="input" placeholder="ไม่มีคอมเมนต์" value="{{order.order_checklist.comment}}" disabled>
+{% endblock %}

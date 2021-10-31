@@ -9,57 +9,14 @@
 <div id="header">
     <div id="header-text">จัดการงาน</div>
 </div>
-<a href="{% url 'qc:tmp_create_order' %}" id="create-order">สร้างออเดอร์</a>
 <div class="text">ข้อมูลที่ต้องการดู</div>
 <select name="select_case" id="select_case" class="selecter">
-    <option value="not_assign">ยังไม่ได้แจกงาน</option>
-    <option value="waiting">แจกงานเเล้ว</option>
-    <option value="rejected">งานไม่ผ่าน</option>
+    <option value="waiting">งานที่ยังไม่ได้ทำ</option>
+    <option value="rejected">งานที่ไม่ผ่าน</option>
     <option value="passed">ผ่านเเล้ว รอแจ้ง</option>
     <option value="completed">แจ้งฝ่ายขายเเล้ว</option>
 </select>
-<div class="table-wrapper" id="not_assign">
-    <table>
-        <thead>
-            <tr>
-                <td>หมายเลขติดตาม</td>
-                <td>วันที่ได้รับ</td>
-                <td>ประเภทงาน</td>
-                <td>ช่างที่ส่งมา</td>
-                <td>พนักงานที่รับผิดชอบ</td>
-                <td>สถานะ</td>
-                <td>หมายเหตุ</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in not_assigns %}
-            <tr>
-                <td>{{order.id}}</td>
-                <td>{{order.created}}</td>
-                <td>
-                    {% if order.case == "first_time" %}
-                        ครั้งแรก
-                    {% elif order.case == "edit" %}
-                        แก้ไขงาน
-                    {% endif %}
-                </td>
-                <td>{{order.craftman.first_name}}</td>
-                <td>{{order.staff.profile.first_name}}</td>
-                <td>{{order.status}}</td>
-                <td>
-                    {% if order.status == "didn't assign" %}
-                    <a href="{% url 'qc:give_work_render' order_id=order.id %}" class="give-work">แจกงาน</button>
-                    {% elif order.status == "passed" %}
-                    <a href="{% url 'qc:send_work' order_id=order.id %}" class="give-work">แจ้งชิ้นงานผ่านการตรวจสอบ</button>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<div class="table-wrapper" id="waiting" style="display: none;">
+<div class="table-wrapper" id="waiting">
     <table>
         <thead>
             <tr>
@@ -88,7 +45,9 @@
                 <td>{{order.staff.profile.first_name}}</td>
                 <td>{{order.status}}</td>
                 <td>
-                    <a href="{% url 'qc:work_detail' order_id=order.id %}" class="give-work">ดูรายละเอียด</button>
+                    {% if order.status == "waiting" %}
+                    <a href="{% url 'qc:check_order' order_id=order.id %}" class="give-work">ตรวจงาน</button>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
@@ -162,9 +121,7 @@
                 <td>{{order.staff.profile.first_name}}</td>
                 <td>{{order.status}}</td>
                 <td>
-                    {% if order.status == "passed" %}
-                    <a href="{% url 'qc:send_work' order_id=order.id %}" class="give-work">แจ้งชิ้นงานผ่านการตรวจสอบ</button>
-                    {% endif %}
+                    <a href="{% url 'qc:work_detail' order_id=order.id %}" class="give-work">ดูรายละเอียด</button>
                 </td>
             </tr>
             {% endfor %}
@@ -209,44 +166,35 @@
     </table>
 </div>
 
+
 <script>
     document.getElementById("select_case").addEventListener('change', function(){
-            if (this.value=="not_assign"){
-                document.getElementById("not_assign").style.display = "block"
-                document.getElementById("waiting").style.display = "none"
-                document.getElementById("rejected").style.display = "none"
-                document.getElementById("passed").style.display = "none"
-                document.getElementById("completed").style.display = "none"
-            }
-            else if (this.value=="waiting"){
-                document.getElementById("not_assign").style.display = "none"
+            if (this.value=="waiting"){
                 document.getElementById("waiting").style.display = "block"
                 document.getElementById("rejected").style.display = "none"
                 document.getElementById("passed").style.display = "none"
                 document.getElementById("completed").style.display = "none"
             }
             else if (this.value=="rejected"){
-                document.getElementById("not_assign").style.display = "none"
                 document.getElementById("waiting").style.display = "none"
                 document.getElementById("rejected").style.display = "block"
                 document.getElementById("passed").style.display = "none"
                 document.getElementById("completed").style.display = "none"
             }
             else if (this.value=="passed"){
-                document.getElementById("not_assign").style.display = "none"
                 document.getElementById("waiting").style.display = "none"
                 document.getElementById("rejected").style.display = "none"
                 document.getElementById("passed").style.display = "block"
                 document.getElementById("completed").style.display = "none"
             }
             else if (this.value=="completed"){
-                document.getElementById("not_assign").style.display = "none"
                 document.getElementById("waiting").style.display = "none"
                 document.getElementById("rejected").style.display = "none"
                 document.getElementById("passed").style.display = "none"
                 document.getElementById("completed").style.display = "block"
             }
         })
+    
     
 </script>
 {% endblock %}

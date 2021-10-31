@@ -2,33 +2,31 @@
 {% load static %}
 {% block title %}Admin{% endblock %}
 {% block head_css %}
+<link href="{% static 'css/create_user.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block content %}
 <div class="container">
     <form action="{% url 'qc:create_order' %}" method="POST">
         {% csrf_token %}
-        <div></div>
-        <select name="craftman" id="craftman-select">
+        <img src="{% static 'images/bg1.jpg' %}" id="bg">
+        <div id="text-header">กรอกข้อมูลออเดอร์</div>
+        <div class="text">ช่างที่ส่งมา</div>
+        <select name="craftman" id="craftman-select" class="input" style="margin-top: 5px;">
             {% for craftman in craftmans %}
             <option value="{{craftman.id}}">{{craftman.first_name}}  {{craftman.last_name}}</option>
             {% endfor %}
         </select>
-        <div></div>
-        <select name="case" id="case-select">
+        <div class="text">ประเภทงาน</div>
+        <select name="case" id="case-select" class="input" style="margin-top: 5px;">
             <option value="first_time">ครั้งแรก</option>
             <option value="edit">แก้ไข</option>
         </select>
-        <div>จำนวนชิ้นงาน</div>
-        <input type="text" name="number">
-        <div>รูปทรงของงาน</div>
-        <input type="text" name="shape">
-        <div>ขนาดของเพชร</div>
-        <input type="text" name="jewelry_size">
-        <div>ขนาดชิ้นงาน</div>
-        <input type="text" name="product_size">
-        <div>ภาพรวม</div>
-        <input type="text" name="overall">
-        <input type="submit" value="OK">
+        <input type="text" name="number" class="input" placeholder="จำนวนชิ้นงาน">
+        <input type="text" name="shape" class="input" placeholder="รูปทรงของงาน">
+        <input type="text" name="jewelry_size" class="input" placeholder="ขนาดของเพชร">
+        <input type="text" name="product_size" class="input" placeholder="ขนาดชิ้นงาน">
+        <input type="text" name="overall" class="input" placeholder="ภาพรวม">
+        <input type="submit" value="OK" class="confirm">
     </form>
 </div>
 {% endblock %}

@@ -30,6 +30,7 @@ class OrderChecklist(models.Model):
     product_size = models.BooleanField(default=False)
     overall = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, blank=False)
+    comment = models.TextField(default=None, blank=True, null=True)
 
 class WorkOrder(models.Model):
     class Meta:
@@ -38,8 +39,9 @@ class WorkOrder(models.Model):
     STATUS = (
         ("didn't assign", "Didn't assign"),
         ("waiting", "Waiting"),
-        ("completed", "Completed"),
+        ("passed", "Passed"),
         ("rejected", "Rejected"),
+        ("completed", "Completed")
     )
     CASE = (
         ("first_time", "First_time"),
@@ -57,3 +59,15 @@ class WorkOrder(models.Model):
     jewelry_size = models.CharField(max_length=200, null=True, blank=True)
     product_size = models.CharField(max_length=200, null=True, blank=True)
     overall = models.CharField(max_length=500, null=True, blank=True)
+
+class MessageOrder(models.Model):
+    class Meta:
+        db_table = "message_orders"
+    STATUS = (
+        ("waiting", "Waiting"),
+        ("sended", "Sended")
+    )
+
+    status = models.CharField(max_length=200, choices=STATUS, default="waiting")
+    created = models.DateTimeField(auto_now_add=True, blank=False)
+    work_order = models.ForeignKey("WorkOrder", on_delete=models.CASCADE)

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Checklist{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/create_user.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<img src="{% static 'images/bg1.jpg' %}" id="bg">
+<div id="text-header" style="margin-left: 60px;">ตรวจงาน ออเดอร์ที่ {{order.id}}</div>
+<form method="POST" action="{% url 'qc:save_order' %}" id="checklist-form" style="margin-left: 60px;">
+    {% csrf_token %}
+
+    <input type="hidden" name="order_id" value="{{order.id}}">
+
+    <div class="text">จำนวนชิ้นงาน {{order.number}} ชิ้น</div>
+    <label class="form-control">
+        <input type="radio" id="number-true" name="number" value="1">
+        ผ่าน
+    </label>
+
+    <label class="form-control">
+        <input type="radio" id="number-false" name="number" value="0">
+        ไม่ผ่าน
+    </label>
+
+    <div class="text">รูปทรงชิ้นงาน {{order.shape}}</div>
+    <label class="form-control">
+        <input type="radio" id="shape-true" name="shape" value="1">
+        ผ่าน
+    </label>
+    <label class="form-control">
+        <input type="radio" id="shape-false" name="shape" value="0">
+        ไม่ผ่าน
+    </label class="form-control">
+
+    <div class="text">ขนาดของจิวเวอรี่ {{order.jewelry_size}}</div>
+    <label class="form-control">
+        <input type="radio" id="jewelry_size-true" name="jewelry_size" value="1">
+        ผ่าน
+    </label>
+    <label class="form-control">
+        <input type="radio" id="jewelry_size-false" name="jewelry_size" value="0">
+        ไม่ผ่าน
+    </label>
+
+    <div class="text">ขนาดชิ้นงาน {{order.product_size}}</div>
+    <label class="form-control">
+        <input type="radio" id="product_size-true" name="product_size" value="1">
+        ผ่าน
+    </label>
+    <label class="form-control">
+        <input type="radio" id="product_size-false" name="product_size" value="0">
+        ไม่ผ่าน
+    </label>
+
+    <div class="text">ภาพรวมชิ้นงาน {{order.overall}}</div>
+    <label class="form-control">
+        <input type="radio" id="overall-true" name="overall" value="1">
+        ผ่าน
+    </label>
+    <label class="form-control">
+        <input type="radio" id="overall-false" name="overall" value="0">
+        ไม่ผ่าน
+    </label>
+
+    <div></div>
+    <textarea name="comment" cols="30" rows="10" placeholder="คอมเมนต์เพิ่มเติม" class="input" style="height: 200px;" form="checklist-form"></textarea>
+    <input type="submit" value="บันทึก" class="confirm">
+</form>
+{% endblock %}

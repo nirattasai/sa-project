@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Admin{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/admin.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div id="header">
+        <div id="header-text">ระบบตรวจสอบคุณภาพจิวเวอรี่</div>
+    </div>
+    <img src="{% static 'images/14994149388351.png' %}" id="admin-bg">
+</div>
+{% endblock %}

@@ -24,11 +24,21 @@
             </form>
         </div>
     {% elif user.profile.role == "staff" %}
-        staff navbar 
+        <div id="navbar">
+            <img src="{% static 'images/logo.png' %}" id="nav-logo">
+            <div id="nav-text">JEWELRY</div>
+            <a href="{% url 'home' %}" class="nav-button">หน้าหลัก</a>
+            <a href="{% url 'qc:manage_order' %}" class="nav-button">จัดการงาน</a>
+            <form method="POST" action="{% url 'logout' %}" id="logout-form">
+                {% csrf_token %}
+                <input id="logout-button" type="submit" value="ออกจากระบบ">
+            </form>
+        </div>
     {% else %}
     {% endif %}
     <div class="container">
         {% block content %}
+
         {% endblock %}
     </div>
     

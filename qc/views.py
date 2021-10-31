@@ -4,7 +4,7 @@ from sa_project import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Profile, OrderChecklist, WorkOrder
+from .models import Profile, OrderChecklist, WorkOrder, MessageOrder
 
 # Create your views here.
 def home(request):
@@ -42,7 +42,7 @@ def admin_home(request):
 
 @login_required
 def staff_home(request):
-    return HttpResponse("staff_home")
+    return render(request, "staff.html")
 
 @login_required
 def create_user_view(request):
@@ -80,12 +80,38 @@ def create_user(request):
     return redirect('home')
 
 def manage_order(request):
-    orders = WorkOrder.objects.filter(creater=request.user)
-    context = {
-        "orders" : orders
-    }
+    if request.user.profile.role == "header":
+        orders = WorkOrder.objects.filter(creater=request.user)
 
-    return render(request, "manage_order.html",context)
+        not_assigns = orders.filter(status="didn't assign")
+        waitings = orders.filter(status="waiting")
+        passeds = orders.filter(status="passed")
+        completeds = orders.filter(status="completed")
+        rejecteds = orders.filter(status="rejected")
+        context = {
+            "not_assigns" : not_assigns,
+            "waitings" : waitings,
+            "passeds" : passeds,
+            "completeds" : completeds,
+            "rejecteds" : rejecteds,
+        }
+        return render(request, "manage_order.html",context)
+    
+    elif request.user.profile.role == "staff":
+        orders = WorkOrder.objects.filter(staff=request.user)
+
+        waitings = orders.filter(status="waiting")
+        passeds = orders.filter(status="passed")
+        completeds = orders.filter(status="completed")
+        rejecteds = orders.filter(status="rejected")
+        context = {
+            "waitings" : waitings,
+            "passeds" : passeds,
+            "completeds" : completeds,
+            "rejecteds" : rejecteds,
+        }
+
+        return render(request, "manage_order_staff.html", context)
 
 def tmp_create_order(request):
     staffs = User.objects.filter(profile__role="staff")
@@ -105,7 +131,6 @@ def create_order(request):
     shape = request.POST.get("shape")
     case = request.POST.get("case")
     
-    print(craftman_id)
     craftman = Profile.objects.get(id=craftman_id)
 
     work_order = WorkOrder.objects.create(
@@ -127,5 +152,93 @@ def create_order(request):
     work_order.order_checklist = order_checklist
     work_order.save()
 
-    # return HttpResponse(request)
     return redirect('qc:manage_order')
+
+def give_work_render(request, order_id):
+    order = WorkOrder.objects.get(id=order_id)
+    staffs = User.objects.filter(profile__role="staff")
+    context = {
+        "order" : order,
+        "staffs" : staffs,
+    }
+
+    return render(request, 'give_work.html', context)
+
+def give_work(request):
+    
+    order_id = request.POST.get("order_id")
+    staff_id = request.POST.get("staff_id")
+    
+    order = WorkOrder.objects.get(id=order_id)
+    staff = User.objects.get(id=staff_id)
+
+    order.staff = staff
+    order.status = "waiting"
+    order.save()
+
+    return redirect('qc:manage_order')
+
+def check_order(request, order_id):
+    order = WorkOrder.objects.get(id=order_id)
+
+    context = {
+        "order" : order,
+    }
+
+    return render(request, 'checklist.html', context)
+
+def save_order(request):
+
+    order_id = request.POST.get("order_id")
+    shape = request.POST.get("shape")
+    jewelry_size = request.POST.get("jewelry_size")
+    product_size = request.POST.get("product_size")
+    overall = request.POST.get("overall")
+    number = request.POST.get("number")
+    comment = request.POST.get("comment")
+
+    order = WorkOrder.objects.get(id=order_id)
+    checklist = OrderChecklist.objects.get(id=order.order_checklist.id)
+
+    checklist.number = number
+    checklist.shape = shape
+    checklist.jewelry_size = jewelry_size
+    checklist.product_size = product_size
+    checklist.overall = overall
+    checklist.comment = comment
+
+    
+
+    if (shape=="0" or jewelry_size=="0" or product_size=="0" or overall=="0" or number=="0"):
+        order.status = "rejected"
+    else:
+        order.status = "passed"
+
+        message_order = MessageOrder.objects.create(
+            work_order = order
+        )
+
+    checklist.save()
+    order.save()
+
+    return redirect('qc:manage_order')
+    
+def send_message_completed(request, order_id):
+    order = WorkOrder.objects.get(id=order_id)
+    order.status = "completed"
+    message_order = MessageOrder.objects.get(work_order=order)
+    message_order.status = "sended"
+
+    order.save()
+    message_order.save()
+    
+    return redirect('qc:manage_order')
+
+def work_detail(request, order_id):
+    order = WorkOrder.objects.get(id=order_id)
+
+    context = {
+        "order" : order,
+    }
+
+    return render(request, 'work_detail.html', context)
