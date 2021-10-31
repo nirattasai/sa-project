@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 <img src="{% static 'images/bg1.jpg' %}" id="bg">
-<div id="text-header" style="margin-left: 60px;">ตรวจงาน ออเดอร์ที่ {{order.id}}</div>
+<div id="text-header" style="margin-left: 60px;">ตรวจงาน <div>{{order.order_code}}</div></div>
 <form method="POST" action="{% url 'qc:save_order' %}" id="checklist-form" style="margin-left: 60px;">
     {% csrf_token %}
 

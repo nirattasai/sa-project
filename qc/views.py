@@ -130,10 +130,12 @@ def create_order(request):
     overall = request.POST.get("overall")
     shape = request.POST.get("shape")
     case = request.POST.get("case")
+    order_code = request.POST.get("order_code")
     
     craftman = Profile.objects.get(id=craftman_id)
 
     work_order = WorkOrder.objects.create(
+        order_code = order_code,
         craftman = craftman,
         status = "didn't assign",
         creater = request.user,

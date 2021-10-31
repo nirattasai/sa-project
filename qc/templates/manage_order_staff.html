@@ -20,7 +20,7 @@
     <table>
         <thead>
             <tr>
-                <td>หมายเลขติดตาม</td>
+                <td>รหัสประจำออเดอร์</td>
                 <td>วันที่ได้รับ</td>
                 <td>ประเภทงาน</td>
                 <td>ช่างที่ส่งมา</td>
@@ -32,7 +32,7 @@
         <tbody>
             {% for order in waitings %}
             <tr>
-                <td>{{order.id}}</td>
+                <td>{{order.order_code}}</td>
                 <td>{{order.created}}</td>
                 <td>
                     {% if order.case == "first_time" %}
@@ -59,7 +59,7 @@
     <table>
         <thead>
             <tr>
-                <td>หมายเลขติดตาม</td>
+                <td>รหัสประจำออเดอร์</td>
                 <td>วันที่ได้รับ</td>
                 <td>ประเภทงาน</td>
                 <td>ช่างที่ส่งมา</td>
@@ -71,7 +71,7 @@
         <tbody>
             {% for order in rejecteds %}
             <tr>
-                <td>{{order.id}}</td>
+                <td>{{order.order_code}}</td>
                 <td>{{order.created}}</td>
                 <td>
                     {% if order.case == "first_time" %}
@@ -96,7 +96,7 @@
     <table>
         <thead>
             <tr>
-                <td>หมายเลขติดตาม</td>
+                <td>รหัสประจำออเดอร์</td>
                 <td>วันที่ได้รับ</td>
                 <td>ประเภทงาน</td>
                 <td>ช่างที่ส่งมา</td>
@@ -108,7 +108,7 @@
         <tbody>
             {% for order in passeds %}
             <tr>
-                <td>{{order.id}}</td>
+                <td>{{order.order_code}}</td>
                 <td>{{order.created}}</td>
                 <td>
                     {% if order.case == "first_time" %}
@@ -133,7 +133,7 @@
     <table>
         <thead>
             <tr>
-                <td>หมายเลขติดตาม</td>
+                <td>รหัสประจำออเดอร์</td>
                 <td>วันที่ได้รับ</td>
                 <td>ประเภทงาน</td>
                 <td>ช่างที่ส่งมา</td>
@@ -145,7 +145,7 @@
         <tbody>
             {% for order in completeds %}
             <tr>
-                <td>{{order.id}}</td>
+                <td>{{order.order_code}}</td>
                 <td>{{order.created}}</td>
                 <td>
                     {% if order.case == "first_time" %}

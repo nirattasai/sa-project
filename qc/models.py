@@ -35,6 +35,7 @@ class OrderChecklist(models.Model):
 class WorkOrder(models.Model):
     class Meta:
         db_table = "work_orders"
+    order_code = models.CharField(max_length=200, null=True, blank=True)
     creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creater")
     STATUS = (
         ("didn't assign", "Didn't assign"),

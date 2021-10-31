@@ -15,13 +15,15 @@
     }
 
 </style>
-    <img src="{% static 'images/bg1.jpg' %}" id="bg">
-    <div id="text-header">รายละเอียดงาน</div>
+    <img src="{% static 'images/bg1.jpg' %}" id="bg" style="height: 1400px;">
+    <div id="text-header">รายละเอียดงาน <div>{{order.order_code}}</div></div>
     <div class="text">สถานะ</div>
     {% if order.status == "waiting" %}
     <input type="text" name="status" class="input" value="แจกงานเเล้ว" disabled>
     {% elif order.status == "rejected" %}
     <input type="text" name="status" class="input" value="งานไม่ผ่าน" disabled>
+    {% elif order.status == "passed" %}
+    <input type="text" name="status" class="input" value="ผ่านเเล้วรอแจ้ง" disabled>
     {% elif order.status == "completed" %}
     <input type="text" name="status" class="input" value="แจ้งฝ่ายขายเเล้ว" disabled>
     {% endif %}
@@ -46,5 +48,5 @@
     <div class="text">ภาพรวม</div>
     <input type="text" name="overall" class="input" placeholder="ภาพรวม" value="{{order.overall}}" disabled>
     <div class="text">คอมเมนต์เพิ่มเติม</div>
-    <input type="text" name="comment" class="input" placeholder="ไม่มีคอมเมนต์" value="{{order.order_checklist.comment}}" disabled>
+    <textarea type="text" name="comment" cols="30" rows="10" style="height: 200px;" class="input" placeholder="ไม่มีคอมเมนต์" disabled>{{order.order_checklist.comment}}</textarea>
 {% endblock %}
