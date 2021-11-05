@@ -5,7 +5,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Profile, OrderChecklist, WorkOrder, MessageOrder
-
+import sweetify
+from datetime import datetime
+import hashlib
 # Create your views here.
 def home(request):
     if request.user.is_authenticated:
@@ -15,12 +17,18 @@ def home(request):
             return redirect('qc:admin_home')
         elif request.user.profile.role == "staff":
             return redirect('qc:staff_home')
-         
+    
     return render(request, "home.html")
 
 def account_login(request):
     username = request.POST["email"]
     password = request.POST["password"]
+    try :
+        u_email = User.objects.get(username=username)
+    except Exception as e:
+        sweetify.error(request, 'อีเมลของคุณไม่ถูกต้อง', persistent='ยืนยัน')
+        return redirect('home')
+
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request,user)
@@ -29,11 +37,13 @@ def account_login(request):
         elif user.profile.role == "staff":
             return redirect('qc:staff_home')
     else:
+        sweetify.error(request, 'รหัสผ่านของคุณไม่ถูกต้อง', persistent='ยืนยัน')
         return redirect('home')
 
 @login_required
 def account_logout(request):
     logout(request)
+    sweetify.info(request, 'logout เรียบร้อย', button='ตกลง', timer=3000)
     return redirect('home')
 
 @login_required
@@ -57,26 +67,39 @@ def create_user(request):
     role = request.POST.get("role")
 
     if role == "staff" or role == "header":
-        user = User.objects.create_user(
-            username = email,
-            password = password,
-            first_name = name,
-            last_name = last_name,
-        )
-        profile = Profile.objects.create(
-            role = role,
-            user = user,
-            first_name = name,
-            last_name = last_name,
-        )
+        try:
+            user = User.objects.create_user(
+                username = email,
+                password = password,
+                first_name = name,
+                last_name = last_name,
+            )
+            profile = Profile.objects.create(
+                role = role,
+                user = user,
+                first_name = name,
+                last_name = last_name,
+                email = email,
+                password = hashlib.sha256(password.encode()).hexdigest(),
+                date_joined = user.date_joined,
+            )
+        except Exception as e:
+            sweetify.error(request, 'การสร้างข้อมูลพนักงานผิดพลาด', persistent='ยืนยัน')
+            return redirect('qc:create_user_view')
 
-    elif role == "craftman":
-        profile = Profile.objects.create(
-            role = role,
-            first_name = name,
-            last_name = last_name,
-        )
+    elif role == "craftsman":
+        try:
+            profile = Profile.objects.create(
+                role = role,
+                first_name = name,
+                last_name = last_name,
+                date_joined = datetime.now()
+            )
+        except Exception as e:
+            sweetify.error(request, 'การสร้างข้อมูลพนักงานผิดพลาด', persistent='ยืนยัน')
+            return redirect('qc:create_user_view')
 
+    sweetify.info(request, 'สร้างข้อมูลพนักงานสำเร็จ', button='ตกลง', timer=3000)
     return redirect('home')
 
 def manage_order(request):
@@ -114,16 +137,14 @@ def manage_order(request):
         return render(request, "manage_order_staff.html", context)
 
 def tmp_create_order(request):
-    staffs = User.objects.filter(profile__role="staff")
-    craftmans = Profile.objects.filter(role="craftman")
+    craftsmans = Profile.objects.filter(role="craftsman")
     context = {
-        "staffs" : staffs,
-        "craftmans" : craftmans
+        "craftsmans" : craftsmans
     }
     return render(request, "tmp_create_order.html", context)
 
 def create_order(request):
-    craftman_id = request.POST.get("craftman")
+    craftsman_id = request.POST.get("craftsman")
     number = request.POST.get("number")
     jewelry_size = request.POST.get("jewelry_size")
     product_size = request.POST.get("product_size")
@@ -132,12 +153,11 @@ def create_order(request):
     case = request.POST.get("case")
     order_code = request.POST.get("order_code")
     
-    craftman = Profile.objects.get(id=craftman_id)
+    craftsman = Profile.objects.get(id=craftsman_id)
 
     work_order = WorkOrder.objects.create(
         order_code = order_code,
-        craftman = craftman,
-        status = "didn't assign",
+        craftsman = craftsman,
         creater = request.user,
         jewelry_size = jewelry_size,
         number = number,
@@ -154,6 +174,7 @@ def create_order(request):
     work_order.order_checklist = order_checklist
     work_order.save()
 
+    sweetify.info(request, 'สร้างออเดอร์สำเร็จ', button='ตกลง', timer=3000)
     return redirect('qc:manage_order')
 
 def give_work_render(request, order_id):
@@ -178,11 +199,11 @@ def give_work(request):
     order.status = "waiting"
     order.save()
 
+    sweetify.info(request, 'แจกงานสำเร็จ', button='ตกลง', timer=3000)
     return redirect('qc:manage_order')
 
 def check_order(request, order_id):
     order = WorkOrder.objects.get(id=order_id)
-
     context = {
         "order" : order,
     }
@@ -209,17 +230,16 @@ def save_order(request):
     checklist.overall = overall
     checklist.comment = comment
 
-    
 
     if (shape=="0" or jewelry_size=="0" or product_size=="0" or overall=="0" or number=="0"):
         order.status = "rejected"
+        sweetify.info(request, 'ออเดอร์ไม่ผ่านการประเมิน', button='ตกลง', timer=3000)
     else:
         order.status = "passed"
-
         message_order = MessageOrder.objects.create(
             work_order = order
         )
-
+        sweetify.info(request, 'ออเดอร์ผ่านการประเมิน', button='ตกลง', timer=3000)
     checklist.save()
     order.save()
 
@@ -233,6 +253,8 @@ def send_message_completed(request, order_id):
 
     order.save()
     message_order.save()
+
+    sweetify.info(request, 'แจ้งฝ่ายขายเรียบร้อย', button='ตกลง', timer=3000)
     
     return redirect('qc:manage_order')
 

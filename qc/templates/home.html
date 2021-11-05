@@ -6,6 +6,9 @@
 {% endblock %}
 {% block content %}
 <div class="container">
+    {% if msg %}
+        {{msg}}
+    {% endif %}
     <img src="{% static 'images/logo.png' %}" id="logo">
     <div id="logo-text">JEWELRY</div>
     <img src="{% static 'images/bg1.jpg' %}" id="bg">
@@ -13,7 +16,24 @@
         {% csrf_token %}
         <input type="email" name="email" id="email-input" placeholder="อีเมล" required="">
         <input type="password" name="password" id="password-input" placeholder="รหัสผ่าน" required="">
-        <input id="login-button" type="submit" value="เข้าสู่ระบบ">
     </form>
+    <button id="login-button">เข้าสู่ระบบ</button>
 </div>
+
+<script>
+    $("#login-button").click(function(){
+        if (document.getElementById('email-input').value == "" || document.getElementById('password-input').value == ""){
+            Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'กรอกข้อมูลให้ครบถ้วน',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+        }
+        else {
+            $("#login-form").submit()
+        }
+    })
+</script>
 {% endblock %}

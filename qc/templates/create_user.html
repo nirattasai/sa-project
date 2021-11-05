@@ -15,33 +15,102 @@
             <option value="header" id="header">หัวหน้างาน</option>
             {% endif %}
             <option value="staff" id="staff">พนักงานตรวจสอบ</option>
-            <option value="craftman" id="craftman">ช่างผลิต</option>
+            <option value="craftsman" id="craftsman">ช่างผลิต</option>
         </select>
         <input type="email" name="email" placeholder="อีเมล" class="input" id="email">
         <input type="text" name="name" placeholder="ชื่อ" class="input" id="name">
         <input type="text" name="lastname" placeholder="นามสกุล" class="input" id="lastname">
         <input type="password" name="password" placeholder="รหัสผ่าน" class="input" id="password">
         <input type="password" name="confirm_password" placeholder="ยืนยันรหัสผ่าน" class="input" id="confirm_password">
-        <input type="submit" value="สร้างข้อมูลพนักงาน" class="confirm">
     </form>
+    <button class="confirm" id="confirm">สร้างข้อมูลพนักงาน</button>
+    <button class="confirm" id="cancel">ยกเลิก</button>
 </div>
 
 
 <script>
-    document.getElementById("name").value = null
-    document.getElementById("lastname").value = null
-    document.getElementById("email").value = null
-    document.getElementById("password").value = null
-    document.getElementById("confirm_password").value = null
 
+    var choice = document.getElementById("role-input").value
+
+    document.getElementById("name").value = ""
+    document.getElementById("lastname").value = ""
+    document.getElementById("email").value = ""
+    document.getElementById("password").value = ""
+    document.getElementById("confirm_password").value = ""
+
+    $('#cancel').click(function(){
+        Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'ข้อมูลจะไม่ถูกบันทึก',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    }).then( function(){
+                        let url = "{% url 'home' %}"
+                        window.location.replace(url);
+                        }
+                    )
+    })
+
+    $('#confirm').click(function(){
+        if (choice=="header"){
+            $('#create-form').submit()
+        }
+        else if (choice=="staff"){
+            if (document.getElementById("name").value == "" ||
+                document.getElementById("lastname").value == "" ||
+                document.getElementById("email").value == "" ||
+                document.getElementById("password").value == "" ||
+                document.getElementById("confirm_password").value == ""){
+                    Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'กรอกข้อมูลให้ครบถ้วน',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+            }
+            else if (document.getElementById("password").value != document.getElementById("confirm_password").value){
+                Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'รหัสผ่านไม่ตรงกัน',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+                    document.getElementById("confirm_password").value = ""
+            }
+            else {
+                $('#create-form').submit()
+            }
+        }
+        else if (choice=="craftsman"){
+            if (document.getElementById("name").value == "" ||
+                document.getElementById("lastname").value == "" ){
+                    Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'กรอกข้อมูลให้ครบถ้วน',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+            }
+
+            else {
+                $('#create-form').submit()
+            }
+        }
+    })
 
     document.getElementById("role-input").addEventListener('change', function(){
-        if (this.value == "craftman"){
+        if (this.value == "craftsman"){
+            choice = this.value
             document.getElementById("email").style.display = "none"
             document.getElementById("password").style.display = "none"
             document.getElementById("confirm_password").style.display = "none"
         }
         else if (this.value == "staff"){
+            choice = this.value
             document.getElementById("email").style.display = "block"
             document.getElementById("password").style.display = "block"
             document.getElementById("confirm_password").style.display = "block"

@@ -66,5 +66,14 @@
     <div></div>
     <textarea name="comment" cols="30" rows="10" placeholder="คอมเมนต์เพิ่มเติม" class="input" style="height: 200px;" form="checklist-form"></textarea>
     <input type="submit" value="บันทึก" class="confirm">
+    
 </form>
+<button class="confirm" id="cancel" style="margin-left: 60px;">ยกเลิก</button>
+<script>
+
+    $('#cancel').click(function(){
+        let url = "{% url 'qc:manage_order' %}"
+        window.location.replace(url);
+    })
+</script>
 {% endblock %}

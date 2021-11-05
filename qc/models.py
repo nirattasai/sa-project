@@ -10,11 +10,14 @@ class Profile(models.Model):
     ROLE = (
         ("header", "Header"),
         ("staff", "Staff"),
-        ("craftman", "Craftman"),
+        ("crafstman", "Crafstman"),
     )
     role = models.CharField(max_length=20, choices=ROLE)
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
+    email = models.CharField(max_length=254, null=True, blank=True)
+    password = models.CharField(max_length=128, null=True, blank=True)
+    date_joined = models.DateTimeField(blank=False, null=True)
 
     def __str__(self):
         return "{}".format(self.user_id)
@@ -50,8 +53,8 @@ class WorkOrder(models.Model):
     )
     case = models.CharField(max_length=200, choices=CASE, null=True, blank=True)
     staff = models.ForeignKey(User, on_delete=models.CASCADE, related_name="staff", null=True)
-    craftman = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="craftman")
-    status = models.CharField(max_length=200, choices=STATUS)
+    craftsman = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="craftsman")
+    status = models.CharField(default="didn't assign" ,max_length=200, choices=STATUS)
     created = models.DateTimeField(auto_now_add=True, blank=False)
     order_checklist = models.ForeignKey(OrderChecklist, on_delete=models.CASCADE, related_name="order_checklist", null=True)
 

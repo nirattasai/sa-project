@@ -6,14 +6,14 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <form action="{% url 'qc:create_order' %}" method="POST">
+    <form action="{% url 'qc:create_order' %}" method="POST" id="create-order">
         {% csrf_token %}
-        <img src="{% static 'images/bg1.jpg' %}" id="bg">
+        <img src="{% static 'images/bg1.jpg' %}" id="bg" style="height: 956px;">
         <div id="text-header">กรอกข้อมูลออเดอร์</div>
         <div class="text">ช่างที่ส่งมา</div>
-        <select name="craftman" id="craftman-select" class="input" style="margin-top: 5px;">
-            {% for craftman in craftmans %}
-            <option value="{{craftman.id}}">{{craftman.first_name}}  {{craftman.last_name}}</option>
+        <select name="craftsman" id="craftsman-select" class="input" style="margin-top: 5px;">
+            {% for craftsman in craftsmans %}
+            <option value="{{craftsman.id}}">{{craftsman.first_name}}  {{craftsman.last_name}}</option>
             {% endfor %}
         </select>
         <div class="text">ประเภทงาน</div>
@@ -21,13 +21,54 @@
             <option value="first_time">ครั้งแรก</option>
             <option value="edit">แก้ไข</option>
         </select>
-        <input type="text" name="order_code" class="input" placeholder="รหัสประจำออเดอร์">
-        <input type="text" name="number" class="input" placeholder="จำนวนชิ้นงาน">
-        <input type="text" name="shape" class="input" placeholder="รูปทรงของงาน">
-        <input type="text" name="jewelry_size" class="input" placeholder="ขนาดของเพชร">
-        <input type="text" name="product_size" class="input" placeholder="ขนาดชิ้นงาน">
-        <input type="text" name="overall" class="input" placeholder="ภาพรวม">
-        <input type="submit" value="OK" class="confirm">
+        <input type="text" name="order_code" class="input" placeholder="รหัสประจำออเดอร์" id="order_code">
+        <input type="text" name="number" class="input" placeholder="จำนวนชิ้นงาน" id="number">
+        <input type="text" name="shape" class="input" placeholder="รูปทรงของงาน" id="shape">
+        <input type="text" name="jewelry_size" class="input" placeholder="ขนาดของเพชร" id="jewelry_size">
+        <input type="text" name="product_size" class="input" placeholder="ขนาดชิ้นงาน" id="product_size">
+        <input type="text" name="overall" class="input" placeholder="ภาพรวม" id="overall">
     </form>
+    <button class="confirm" id="confirm">สร้างข้อมูลออเดอร์</button>
+    <button class="confirm" id="cancel">ยกเลิก</button>
 </div>
+
+<script>
+
+    $('#cancel').click(function(){
+        Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'ออเดอร์ของคุณไม่ถูกสร้าง',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    }).then( function(){
+                        let url = "{% url 'home' %}"
+                        window.location.replace(url);
+                        }
+                    )
+        
+    })
+
+    $('#confirm').click(function(){
+
+            if (document.getElementById("order_code").value == "" ||
+                document.getElementById("number").value == "" ||
+                document.getElementById("shape").value == "" ||
+                document.getElementById("jewelry_size").value == "" ||
+                document.getElementById("product_size").value == ""
+                ){
+                    Swal.fire({
+                        title: 'แจ้งเตือน',
+                        text: 'กรอกข้อมูลให้ครบถ้วน',
+                        type: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+            }
+            else {
+                $('#create-order').submit()
+            }  
+    })
+
+</script>
 {% endblock %}
